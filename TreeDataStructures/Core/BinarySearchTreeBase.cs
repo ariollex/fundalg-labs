@@ -317,6 +317,7 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
                 {
                     if (_previous is null)
                     {
+                        _previous = _current;
                         while (SwitchToLeft()) { }
                         return true; // Return first (leftest) node
                     }
@@ -394,6 +395,7 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
                 {
                     if (_previous is null)
                     {
+                        _previous = _current;
                         while (SwitchToRight()) { }
                         return true; // Return first (leftest) node
                     }
@@ -536,4 +538,26 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
     }
 
     public bool Remove(KeyValuePair<TKey, TValue> item) => Remove(item.Key);
+    
+    protected TNode Maximum(TNode node)
+    {
+        if (node is null) throw new NullReferenceException("Tree is empty"); 
+        while (node.Right is not null)
+        {
+            node = node.Right;
+        }
+
+        return node;
+    }
+
+    protected TNode Minimum(TNode node)
+    {
+        if (node is null) throw new NullReferenceException("Tree is empty"); 
+        while (node.Left is not null)
+        {
+            node = node.Left;
+        }
+
+        return node;
+    }
 }
