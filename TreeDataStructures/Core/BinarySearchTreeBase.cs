@@ -78,29 +78,41 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
             Transplant(node, null);
             OnNodeRemoved(node.Parent, null);
         } else if ((node.Right is null) != (node.Left is null)) { // Our node has only one child
-            Transplant(node, node.Left ?? node.Right); // returns left if not null, else returns right
-            OnNodeRemoved(node, node.Left ?? node.Right);
+            var toRaise = node.Left ?? node.Right; // returns left if not null, else returns right
+            Transplant(node, toRaise);
+            OnNodeRemoved(node.Parent, toRaise);
         } else
         {
-            TNode currNode = node.Right!;
+            var currNode = node.Right!;
             // Inorder successor
             while (currNode.Left is not null)
             {
                 currNode = currNode.Left;
             }
 
+            TNode? parent;
+            TNode? child;
+            
             if (currNode.Parent != node) // Successor is not node.Right
             {
-                // currNode.Right may be exits
+                parent = currNode.Parent;
+                child = currNode.Right;
+                
+                // currNode.Right may be existed
                 Transplant(currNode, currNode.Right); // currNode no more in tree
                 currNode.Right = node.Right!; // save links to right child
                 currNode.Right.Parent = currNode;
+            }
+            else
+            {
+                parent = currNode;
+                child = currNode.Right;
             }
 
             Transplant(node, currNode);
             currNode.Left = node.Left!;
             currNode.Left.Parent = currNode;
-            OnNodeRemoved(currNode, node);
+            OnNodeRemoved(parent, child);
         }
     }
 
@@ -158,7 +170,7 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
         return null;
     }
 
-    protected void RotateLeft(TNode x)
+    protected virtual void RotateLeft(TNode x)
     {
         if (x.Parent is null || !x.IsRightChild) return;
 
@@ -188,7 +200,7 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
         }
     }
 
-    protected void RotateRight(TNode y)
+    protected virtual void RotateRight(TNode y)
     {
         if (y.Parent is null || !y.IsLeftChild) return;
 
