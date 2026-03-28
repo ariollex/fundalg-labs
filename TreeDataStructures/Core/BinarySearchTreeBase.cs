@@ -539,9 +539,9 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
 
     public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
     {
-        if (array is null) throw new ArgumentNullException(nameof(array));
-        if (arrayIndex < 0) throw new ArgumentOutOfRangeException(nameof(arrayIndex));
-        if (arrayIndex > array.Length) throw new ArgumentOutOfRangeException(nameof(arrayIndex));
+        ArgumentNullException.ThrowIfNull(array);
+        ArgumentOutOfRangeException.ThrowIfNegative(arrayIndex);
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(array.Length, arrayIndex);
         if (Count - array.Length < 0) throw new InvalidOperationException("The collection has not enough space.");
         foreach (var item in this)
         {
