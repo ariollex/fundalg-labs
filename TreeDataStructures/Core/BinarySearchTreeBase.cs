@@ -174,9 +174,9 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
     {
         if (x.Parent is null || !x.IsRightChild) return;
 
-        TNode? tmp = x.Left;
-        TNode? pp = x.Parent.Parent;
-        bool pWasLeftChild = x.Parent.IsLeftChild;
+        var tmp = x.Left;
+        var pp = x.Parent.Parent;
+        var pWasLeftChild = x.Parent.IsLeftChild;
 
         // Rotate
         x.Left = x.Parent;
@@ -204,9 +204,9 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
     {
         if (y.Parent is null || !y.IsLeftChild) return;
 
-        TNode? tmp = y.Right;
-        TNode? pp = y.Parent.Parent;
-        bool pWasLeftChild = y.Parent.IsLeftChild;
+        var tmp = y.Right;
+        var pp = y.Parent.Parent;
+        var pWasLeftChild = y.Parent.IsLeftChild;
 
         y.Right = y.Parent;
         y.Parent.Parent = y;
@@ -231,7 +231,7 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
     
     protected void RotateBigLeft(TNode x)
     {
-        if (x.Parent is null || x.Parent.Parent is null) return;
+        if (x.Parent?.Parent is null) return;
         if (!x.IsLeftChild || !x.Parent.IsRightChild) return;
 
         RotateRight(x);
@@ -240,7 +240,7 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
     
     protected void RotateBigRight(TNode y)
     {
-        if (y.Parent is null || y.Parent.Parent is null) return;
+        if (y.Parent?.Parent is null) return;
         if (!y.IsRightChild || !y.Parent.IsLeftChild) return;
 
         RotateLeft(y);
