@@ -92,7 +92,6 @@ public class AvlTree<TKey, TValue> : BinarySearchTreeBase<TKey, TValue, AvlNode<
 
     private static int Bf(AvlNode<TKey, TValue>? node)
     {
-        if (node is null) return 0;
-        return Height(node.Right) - Height(node.Left);
+        return Height(node?.Right) - Height(node?.Left);
     }
 }

@@ -33,7 +33,6 @@ public class SplayTree<TKey, TValue> : BinarySearchTree<TKey, TValue>
     {
     }
     
-    
     public override bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
     {
         var node = FindNode(key);
@@ -94,7 +93,7 @@ public class SplayTree<TKey, TValue> : BinarySearchTree<TKey, TValue>
         Root = left;
         Splay(Maximum(left));
         
-        Root!.Right = right;
+        Root.Right = right;
         right.Parent = Root;
         
         return Root;

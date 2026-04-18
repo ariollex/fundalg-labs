@@ -80,13 +80,13 @@ public class Treap<TKey, TValue> : BinarySearchTreeBase<TKey, TValue, TreapNode<
         Root = Merge(Merge(left, newNode), right);
         ++Count;
     }
-
+    
     public override bool Remove(TKey key)
     {
         var (left, right) = Split(Root, key);
         if (left is null)
         {
-            Root = Merge(left, right);
+            Root = right;
             return false;
         }
 

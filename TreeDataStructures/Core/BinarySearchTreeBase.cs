@@ -74,21 +74,16 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
     
     protected virtual void RemoveNode(TNode node)
     {
-        if ((node.Right is null) && (node.Left is null)) { // No children
+        if ((node.Right is null) && (node.Left is null)) { // Case 0: No children
             Transplant(node, null);
             OnNodeRemoved(node.Parent, null);
-        } else if ((node.Right is null) != (node.Left is null)) { // Our node has only one child
+        } else if ((node.Right is null) != (node.Left is null)) { // Case 2: 1 child
             var toRaise = node.Left ?? node.Right; // returns left if not null, else returns right
             Transplant(node, toRaise);
             OnNodeRemoved(node.Parent, toRaise);
-        } else
+        } else // Case 3: 2 children
         {
-            var currNode = node.Right!;
-            // Inorder successor
-            while (currNode.Left is not null)
-            {
-                currNode = currNode.Left;
-            }
+            var currNode = Minimum(node.Right!); // "Inorder successor"
 
             TNode? parent;
             TNode? child;
@@ -99,14 +94,14 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
                 child = currNode.Right;
                 
                 // currNode.Right may be existed
-                Transplant(currNode, currNode.Right); // currNode no more in tree
+                Transplant(currNode, currNode.Right); // Replace currNode with right child, its no more in tree
                 currNode.Right = node.Right!; // save links to right child
                 currNode.Right.Parent = currNode;
             }
             else
             {
-                parent = currNode;
-                child = currNode.Right;
+                parent = node.Parent;
+                child = currNode;
             }
 
             Transplant(node, currNode);
@@ -543,17 +538,14 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
         ArgumentOutOfRangeException.ThrowIfNegative(arrayIndex);
         ArgumentOutOfRangeException.ThrowIfGreaterThan(array.Length, arrayIndex);
         if (Count - array.Length < 0) throw new InvalidOperationException("The collection has not enough space.");
-        foreach (var item in this)
-        {
-            array[arrayIndex++] = item;
-        }
+        foreach (var item in this) array[arrayIndex++] = item;
     }
 
     public bool Remove(KeyValuePair<TKey, TValue> item) => Remove(item.Key);
     
     protected TNode Maximum(TNode node)
     {
-        if (node is null) throw new NullReferenceException("Tree is empty"); 
+        ArgumentNullException.ThrowIfNull(node);
         while (node.Right is not null)
         {
             node = node.Right;
@@ -564,7 +556,7 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
 
     protected TNode Minimum(TNode node)
     {
-        if (node is null) throw new NullReferenceException("Tree is empty"); 
+        ArgumentNullException.ThrowIfNull(node);
         while (node.Left is not null)
         {
             node = node.Left;
