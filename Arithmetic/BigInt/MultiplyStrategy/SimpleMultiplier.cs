@@ -6,18 +6,14 @@ internal class SimpleMultiplier : IMultiplier
 {
     public BetterBigInteger Multiply(BetterBigInteger a, BetterBigInteger b)
     {
-        var zero = new BetterBigInteger([0]);
-        if (a == zero || b == zero) return zero;
+        if (a == BetterBigInteger.Zero || b == BetterBigInteger.Zero) return BetterBigInteger.Zero;
 
-        var first = a.IsNegative ? -a : a;
-        var second = b.IsNegative ? -b : b;
+        var result = new BetterBigInteger([]);
 
-        var result = new BetterBigInteger([0]);
+        var digitsA = a.GetDigits();
+        var digitsB = b.GetDigits();
 
-        var digitsA = first.GetDigits();
-        var digitsB = second.GetDigits();
-
-        const int halfBits = sizeof(uint) * 8 / 2;
+        const int halfBits = BetterBigInteger.CountBits / 2;
         const uint halfBase = 1 << halfBits;
 
         for (var j = 0; j < digitsB.Length; ++j)

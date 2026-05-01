@@ -13,8 +13,9 @@ public sealed class BetterBigInteger : IBigInteger
 
     public bool IsNegative => _signBit == 1;
     
-    private static readonly BetterBigInteger Zero = new([]);
-    private const int CountBits = sizeof(uint) * 8;
+    internal static readonly BetterBigInteger Zero = new([]);
+    internal const int CountBits = sizeof(uint) * 8;
+    internal static readonly SimpleMultiplier SimpleMultiplier = new SimpleMultiplier();
     
     /// От массива цифр (little endian)
     public BetterBigInteger(uint[] digits, bool isNegative = false)
@@ -274,8 +275,7 @@ public sealed class BetterBigInteger : IBigInteger
 
     public static BetterBigInteger operator *(BetterBigInteger a, BetterBigInteger b)
     {
-        var multiplier = new SimpleMultiplier();
-        return multiplier.Multiply(a, b);
+        return SimpleMultiplier.Multiply(a, b);
     }
     
     #region Helpers
