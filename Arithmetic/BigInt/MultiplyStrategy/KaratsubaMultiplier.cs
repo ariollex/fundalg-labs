@@ -4,7 +4,7 @@ namespace Arithmetic.BigInt.MultiplyStrategy;
 
 internal class KaratsubaMultiplier : IMultiplier
 {
-    private BetterBigInteger KaratsubaMultiply(BetterBigInteger a, BetterBigInteger b)
+    private static BetterBigInteger KaratsubaMultiply(BetterBigInteger a, BetterBigInteger b)
     {
         if (a == BetterBigInteger.Zero || b == BetterBigInteger.Zero) return BetterBigInteger.Zero;
         
