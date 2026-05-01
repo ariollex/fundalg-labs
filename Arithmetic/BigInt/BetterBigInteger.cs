@@ -15,7 +15,7 @@ public sealed class BetterBigInteger : IBigInteger
     
     internal static readonly BetterBigInteger Zero = new([]);
     internal const int CountBits = sizeof(uint) * 8;
-    internal static readonly SimpleMultiplier SimpleMultiplier = new SimpleMultiplier();
+    internal static readonly SimpleMultiplier SimpleMultiplier = new();
     
     /// От массива цифр (little endian)
     public BetterBigInteger(uint[] digits, bool isNegative = false)
