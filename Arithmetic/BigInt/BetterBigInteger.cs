@@ -466,28 +466,28 @@ public sealed class BetterBigInteger : IBigInteger
     public string ToString(int radix)
     {
         if (radix is < 2 or > 36) throw new ArgumentOutOfRangeException(nameof(radix), "radix must be between 2 and 36");
-        
+        if (this == Zero) return "0";
+
         var bbiRadix = new BetterBigInteger([(uint)radix]);
         var number = (this < Zero ? -this : this);
         
         var result = new StringBuilder();
         
-        if (number == Zero)
+        while (number != Zero)
         {
-            result.Append('0');
-        }
-        else
-        {
-            while (number != Zero)
-            {
-                var digit = (number % bbiRadix).GetDigits()[0];
-                result.Append((char)(digit <= 9 ? '0' + digit : 'A' + digit - 10));
-                number /= bbiRadix;
-            }
+            var digit = (number % bbiRadix).GetDigits()[0];
+            result.Append((char)(digit <= 9 ? '0' + digit : 'A' + digit - 10));
+            number /= bbiRadix;
         }
         
         if (IsNegative) result.Append('-');
         
-        return new string(result.ToString().Reverse().ToArray());
+        for (var left = 0; left < result.Length / 2; ++left)
+        {
+            var right = result.Length - 1 - left;
+            (result[left], result[right]) = (result[right], result[left]);
+        }
+        
+        return result.ToString();
     }
 }
