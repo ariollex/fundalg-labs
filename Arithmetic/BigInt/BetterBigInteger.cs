@@ -37,6 +37,24 @@ public sealed class BetterBigInteger : IBigInteger
         if (len != 0) _signBit = isNegative ? 1 : 0;
     }
     public BetterBigInteger(IEnumerable<uint> digits, bool isNegative = false): this(digits.ToArray(), isNegative) { }
+
+    public BetterBigInteger(ReadOnlySpan<uint> digits, bool isNegative = false)
+    {
+        var len = digits.Length;
+        while (len > 0 && digits[len - 1] == 0) --len;
+        
+        if (len < 2)
+        {
+            _smallValue = (len == 0 ? 0 : digits[0]);
+            _data = null;
+        }
+        else
+        {
+            _data = digits[..len].ToArray();
+        }
+        if (len != 0) _signBit = isNegative ? 1 : 0;
+    }
+    
     public BetterBigInteger(string value, int radix)
     {
         ArgumentException.ThrowIfNullOrEmpty(value);
@@ -181,7 +199,7 @@ public sealed class BetterBigInteger : IBigInteger
         return new BetterBigInteger(digits, resultNegative);
     }
 
-    public static BetterBigInteger operator -(BetterBigInteger a) => new(a.GetDigits().ToArray(), !a.IsNegative);
+    public static BetterBigInteger operator -(BetterBigInteger a) => new(a.GetDigits(), !a.IsNegative);
 
     public static BetterBigInteger operator /(BetterBigInteger a, BetterBigInteger b)
     {
@@ -226,7 +244,7 @@ public sealed class BetterBigInteger : IBigInteger
             if (digitQuotient != 0) acc -= new BetterBigInteger([digitQuotient]) * absB;
         }
         return quotient == Zero ? 
-            Zero : new BetterBigInteger(quotient.GetDigits().ToArray(), a.IsNegative != b.IsNegative);
+            Zero : new BetterBigInteger(quotient.GetDigits(), a.IsNegative != b.IsNegative);
     }
 
     public static BetterBigInteger operator %(BetterBigInteger a, BetterBigInteger b)
@@ -269,7 +287,7 @@ public sealed class BetterBigInteger : IBigInteger
             if (digitQuotient != 0) acc -= new BetterBigInteger([digitQuotient]) * absB;
         }
         
-        return new BetterBigInteger(acc.GetDigits().ToArray(), a.IsNegative);
+        return new BetterBigInteger(acc.GetDigits(), a.IsNegative);
     }
 
 
@@ -315,7 +333,7 @@ public sealed class BetterBigInteger : IBigInteger
         
         var tmp = new BetterBigInteger(inverted) + new BetterBigInteger([1]);
         
-        return new BetterBigInteger(tmp.GetDigits().ToArray(), true);
+        return new BetterBigInteger(tmp.GetDigits(), true);
     }
     #endregion
 

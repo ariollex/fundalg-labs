@@ -14,10 +14,10 @@ internal class KaratsubaMultiplier : IMultiplier
         var m = Math.Max(digitsA.Length, digitsB.Length) / 2;
         if (m == 0) return BetterBigInteger.SimpleMultiplier.Multiply(a, b);
 
-        var a0 = new BetterBigInteger(digitsA[..Math.Min(m, digitsA.Length)].ToArray());
-        var a1 = new BetterBigInteger(digitsA[Math.Min(m, digitsA.Length)..].ToArray());
-        var b0 = new BetterBigInteger(digitsB[..Math.Min(m, digitsB.Length)].ToArray());
-        var b1 = new BetterBigInteger(digitsB[Math.Min(m, digitsB.Length)..].ToArray());
+        var a0 = new BetterBigInteger(digitsA[..Math.Min(m, digitsA.Length)]);
+        var a1 = new BetterBigInteger(digitsA[Math.Min(m, digitsA.Length)..]);
+        var b0 = new BetterBigInteger(digitsB[..Math.Min(m, digitsB.Length)]);
+        var b1 = new BetterBigInteger(digitsB[Math.Min(m, digitsB.Length)..]);
 
         var m0 = KaratsubaMultiply(a0, b0);
         var m2 = KaratsubaMultiply(a1, b1);
@@ -30,8 +30,8 @@ internal class KaratsubaMultiplier : IMultiplier
 
     public BetterBigInteger Multiply(BetterBigInteger a, BetterBigInteger b) 
     { 
-        var absA = new BetterBigInteger(a.GetDigits().ToArray());
-        var absB = new BetterBigInteger(b.GetDigits().ToArray());
+        var absA = a < BetterBigInteger.Zero ? -a : a;
+        var absB = b < BetterBigInteger.Zero ? -b : b;
         var result = KaratsubaMultiply(absA, absB);
         
         return a.IsNegative != b.IsNegative ? -result : result;
