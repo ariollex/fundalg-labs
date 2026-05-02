@@ -36,7 +36,7 @@ internal class SimpleMultiplier : IMultiplier
 
                 var digitProduct = rr + lr + rl + ll;
 
-                var fullShift = (i + j) * sizeof(uint) * 8;
+                var fullShift = (i + j) * BetterBigInteger.CountBits;
                 digitProduct <<= fullShift;
 
                 result += digitProduct;
