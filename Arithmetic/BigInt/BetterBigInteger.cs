@@ -427,7 +427,7 @@ public sealed class BetterBigInteger : IBigInteger
         var wordShift = shift / CountBits;
         shift %= CountBits;
 
-        var size = a.GetDigits().Length + 1 + shift / CountBits;
+        var size = a.GetDigits().Length + 1;
         var words = a.ToTwosComplement(size);
         
         var digits = new uint[size];
