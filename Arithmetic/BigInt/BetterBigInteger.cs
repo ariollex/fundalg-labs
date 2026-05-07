@@ -238,10 +238,10 @@ public sealed class BetterBigInteger : IBigInteger
                     right = mid - 1;
                 }
             }
-            
-            quotient = (quotient << CountBits) + new BetterBigInteger([digitQuotient]);
 
-            if (digitQuotient != 0) acc -= new BetterBigInteger([digitQuotient]) * absB;
+            var bbiDigitQuotient = new BetterBigInteger([digitQuotient]);
+            quotient = (quotient << CountBits) + bbiDigitQuotient;
+            if (digitQuotient != 0) acc -= bbiDigitQuotient * absB;
         }
         return quotient == Zero ? 
             Zero : new BetterBigInteger(quotient.GetDigits(), a.IsNegative != b.IsNegative);
