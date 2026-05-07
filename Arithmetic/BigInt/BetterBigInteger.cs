@@ -62,7 +62,7 @@ public sealed class BetterBigInteger : IBigInteger
         if (radix is < 2 or > 36) throw new ArgumentOutOfRangeException(nameof(radix), "radix must be between 2 and 36");
         
         var isNegative = value[0] == '-';
-        var start = (value[0] == '-' || value[0] == '+') ? 1 : 0;
+        var start = value[0] == '-' || value[0] == '+' ? 1 : 0;
         
         if (start == value.Length) throw new ArgumentException("Wrong value");
         
@@ -73,7 +73,6 @@ public sealed class BetterBigInteger : IBigInteger
         {
             var digit = (value[i] is >= '0' and <= '9') ? value[i] - '0' : value[i] - 'A' + 10;
             if (digit < 0 || digit >= radix) throw new ArgumentException("Wrong value");
-            ArgumentOutOfRangeException.ThrowIfGreaterThanOrEqual(digit, radix);
             current = current * bbiRadix + new BetterBigInteger([(uint)digit]);
         }
         
