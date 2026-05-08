@@ -427,24 +427,6 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
                 {
                     if (_previous is null)
                     {
-                        while (SwitchToRight() || SwitchToLeft()) { }
-                        return true; // Return first (downest) node
-                    }
-                    
-                    if (!SwitchToParent()) return false;
-
-                    if (_previous == _current.Right && _current.Left is not null) //if we can go to the left after right
-                    {
-                        SwitchToLeft();
-                        while (SwitchToRight() || SwitchToLeft()) { } // return downest right->left node
-                    }
-                    
-                    return true;
-                }
-                case TraversalStrategy.PostOrderReverse:
-                {
-                    if (_previous is null)
-                    {
                         _previous = _current;
                         return true; // return Root node
                     }
@@ -475,6 +457,24 @@ public abstract class BinarySearchTreeBase<TKey, TValue, TNode>(IComparer<TKey>?
                     }
 
                     return false;
+                }
+                case TraversalStrategy.PostOrderReverse:
+                {
+                    if (_previous is null)
+                    {
+                        while (SwitchToRight() || SwitchToLeft()) { }
+                        return true; // Return first (downest) node
+                    }
+                    
+                    if (!SwitchToParent()) return false;
+
+                    if (_previous == _current.Right && _current.Left is not null) //if we can go to the left after right
+                    {
+                        SwitchToLeft();
+                        while (SwitchToRight() || SwitchToLeft()) { } // return downest right->left node
+                    }
+                    
+                    return true;
                 }
                 default: throw new ArgumentException("Unknown traversal strategy");
             }
